@@ -6,24 +6,16 @@ fun main() {
     val conta1 = Conta()
     conta1.titular = "Leandro"
     conta1.numeroConta = 1000
-    conta1.saldo = 100.0
+    conta1.setSaldo(100.0)
 
     val conta2 = Conta()
     conta2.titular = "Alex"
     conta2.numeroConta = 1001
-    conta2.saldo = -200.0
-
-//    println("Titular: " + conta1.titular)
-//    println("Numero da conta: " + conta1.numeroConta)
-//    println("Saldo: " + conta1.saldo)
-//
-//    println("Titular: " + conta2.titular)
-//    println("Numero da conta: " + conta2.numeroConta)
-//    println("Saldo: " + conta2.saldo)
+    conta1.setSaldo(-200.0)
 
     conta1.deposita(500.0)
     conta1.transferePara(conta2, 250.0)
-    println("Saldo de ${conta2.titular}: ${conta2.saldo}")
+    println("Saldo de ${conta2.titular}: ${conta2.getSaldo()}")
 
     if (conta1.transferePara(conta2, 250.0)) {
         println("Transferência realizada com sucesso!")
@@ -36,7 +28,7 @@ fun main() {
 class Conta {
     var titular: String = ""
     var numeroConta: Int = 0
-    var saldo = 0.0
+    private var saldo = 0.0
     //var: variavel mutável; val: variável imutável
     //nao é necessário declarar o tipo da variável
 
@@ -44,7 +36,7 @@ class Conta {
         this.saldo += valor
         println()
         println("Bem vindo(a), ${this.titular}")
-        println("Você depositou o valor $valor na sua conta. Seu saldo agora é de ${this.saldo}")
+        println("Você depositou o valor $valor na sua conta. Seu saldo agora é de ${this.getSaldo()}")
     }
 
     fun saca(valor: Double) {
@@ -52,9 +44,9 @@ class Conta {
         println("Bem vindo(a), ${this.titular}")
         if (saldo >= valor) {
             this.saldo -= valor
-            println("Você sacou o valor $valor na sua conta. Seu saldo agora é de ${this.saldo}")
+            println("Você sacou o valor $valor na sua conta. Seu saldo agora é de ${this.getSaldo()}")
         } else {
-            println("Seu saldo é de ${this.saldo}. Você não tem saldo suficiente para sacar o valor $valor.")
+            println("Seu saldo é de ${this.getSaldo()}. Você não tem saldo suficiente para sacar o valor $valor.")
         }
     }
 
@@ -63,13 +55,21 @@ class Conta {
         println("Bem vindo(a), ${this.titular}")
         if (saldo >= valor) {
             this.saldo -= valor
-            contaDestino.saldo += valor
-            println("Você transferiu o valor $valor da sua conta para a conta de ${contaDestino.titular}. Seu saldo agora é de ${this.saldo}")
+            contaDestino.deposita(valor)
+            println("Você transferiu o valor $valor da sua conta para a conta de ${contaDestino.titular}. Seu saldo agora é de ${this.getSaldo()}")
             return true
         } else {
-            println("Seu saldo é de ${this.saldo}. Você não tem saldo suficiente para transferir o valor $valor.")
+            println("Seu saldo é de ${this.getSaldo()}. Você não tem saldo suficiente para transferir o valor $valor.")
             return false
         }
+    }
+
+    fun getSaldo(): Double{
+        return saldo
+    }
+
+    fun setSaldo(valor: Double){
+        saldo = valor
     }
 }
 
@@ -77,27 +77,27 @@ fun testaCopiasEReferencias() {
     val conta1 = Conta()
     conta1.titular = "Leandro"
     conta1.numeroConta = 1000
-    conta1.saldo = 100.0
+    conta1.setSaldo(100.0)
 
 //    val conta2 = conta1    ao fazer isso, as duas contas apontarão para o mesmo espaço na memória. Precisa criar uma nova instância
     val conta2 = Conta()
     conta2.titular = "Alex"
     conta2.numeroConta = 1001
-    conta2.saldo = -200.0
+    conta2.setSaldo(-200.0)
 
     println("Titular: " + conta1.titular)
     println("Numero da conta: " + conta1.numeroConta)
-    println("Saldo: " + conta1.saldo)
+    println("Saldo: " + conta1.getSaldo())
     //String template recebe a variavel dentro da string
 
-    testaCondicoes(conta1.saldo);
+    testaCondicoes(conta1.getSaldo());
 
     println("Titular: " + conta2.titular)
     println("Numero da conta: " + conta2.numeroConta)
-    println("Saldo: " + conta2.saldo)
+    println("Saldo: " + conta2.getSaldo())
     //String template recebe a variavel dentro da string
 
-    testaCondicoes(conta2.saldo);
+    testaCondicoes(conta2.getSaldo());
 }
 
 fun testaLacos() {
