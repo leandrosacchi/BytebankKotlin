@@ -1,6 +1,6 @@
 import kotlin.reflect.typeOf
 
-fun main(){
+fun main() {
     println("Bem vindo ao Bytebank");
 
     val conta1 = Conta()
@@ -21,14 +21,56 @@ fun main(){
 //    println("Numero da conta: " + conta2.numeroConta)
 //    println("Saldo: " + conta2.saldo)
 
-    deposita(conta1,50.0)
+    conta1.deposita(500.0)
+    conta1.transferePara(conta2, 250.0)
+    println("Saldo de ${conta2.titular}: ${conta2.saldo}")
+
+    if (conta1.transferePara(conta2, 250.0)) {
+        println("Transferência realizada com sucesso!")
+    } else {
+        println("Falha ao realziar transferência.")
+    }
+
 }
 
-fun deposita(conta: Conta, valor: Double){
-    conta.saldo += valor
-    println()
-    println("Bem vindo(a), ${conta.titular}")
-    println("Você depositou o valor $valor na sua conta. Seu saldo agora é de ${conta.saldo}")
+class Conta {
+    var titular: String = ""
+    var numeroConta: Int = 0
+    var saldo = 0.0
+    //var: variavel mutável; val: variável imutável
+    //nao é necessário declarar o tipo da variável
+
+    fun deposita(valor: Double) {
+        this.saldo += valor
+        println()
+        println("Bem vindo(a), ${this.titular}")
+        println("Você depositou o valor $valor na sua conta. Seu saldo agora é de ${this.saldo}")
+    }
+
+    fun saca(valor: Double) {
+        println()
+        println("Bem vindo(a), ${this.titular}")
+        if (saldo >= valor) {
+            this.saldo -= valor
+            println("Você sacou o valor $valor na sua conta. Seu saldo agora é de ${this.saldo}")
+        } else {
+            println("Seu saldo é de ${this.saldo}. Você não tem saldo suficiente para sacar o valor $valor.")
+        }
+    }
+
+    fun transferePara(contaDestino: Conta, valor: Double): Boolean {
+        println()
+        println("Bem vindo(a), ${this.titular}")
+        if (saldo >= valor) {
+            this.saldo -= valor
+            contaDestino.saldo += valor
+            println("Você transferiu o valor $valor da sua conta para a conta de ${contaDestino.titular}. Seu saldo agora é de ${this.saldo}")
+            return true
+        } else {
+            println("Seu saldo é de ${this.saldo}. Você não tem saldo suficiente para transferir o valor $valor.")
+            return false
+        }
+    }
 }
 
 fun testaCopiasEReferencias() {
@@ -58,17 +100,6 @@ fun testaCopiasEReferencias() {
     testaCondicoes(conta2.saldo);
 }
 
-
-class Conta{
-    var titular: String = ""
-    var numeroConta: Int = 0
-    var saldo = 0.0
-    //var: variavel mutável; val: variável imutável
-    //nao é necessário declarar o tipo da variável
-
-
-}
-
 fun testaLacos() {
     //estruturas de repetição
     for (i in 1..5) {
@@ -86,19 +117,19 @@ fun testaLacos() {
     }
 }
 
-fun testaCondicoes(saldo: Double){
+fun testaCondicoes(saldo: Double) {
     if (saldo > 0.0) {
         println("Saldo é positivo")
     } else if (saldo == 0.0) {
         println("Saldo é zero")
     } else {
-        println ("Saldo é negativo")
+        println("Saldo é negativo")
     }
 
     //expressão when equivalente a expressão if acima
     when {
         saldo > 0.0 -> println("Saldo é positivo")
         saldo == 0.0 -> println("Saldo é zero")
-        else -> println ("Saldo é negativo")
+        else -> println("Saldo é negativo")
     }
 }
